@@ -7,4 +7,5 @@ allure-report
 .venv
 __pycache__
 credentials.py
+credentials.json
 .env

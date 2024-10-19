@@ -2,6 +2,7 @@ import pytest
 from root.endpoints.authorize_user import AuthorizeUser
 from root.endpoints.check_token import CheckExistingToken
 from root.endpoints.get_all_memes import GetAllMemes
+from root.endpoints.get_one_meme import GetOneMeme
 
 
 @pytest.fixture(scope="session")
@@ -23,3 +24,10 @@ def get_memes_endpoint(authorize_endpoint):
     all_memes = GetAllMemes()
     all_memes.token = authorize_endpoint.token
     return all_memes
+
+
+@pytest.fixture()
+def get_meme_by_id_endpoint(authorize_endpoint):
+    meme = GetOneMeme()
+    meme.token = authorize_endpoint.token
+    return meme
