@@ -22,16 +22,10 @@ def test_get_one_meme(get_meme_by_id_endpoint, meme_id):
 
 @pytest.mark.parametrize("meme", MEME_DATA)
 def test_create_meme(create_meme_endpoint, meme):
-    data = {
-        "url": meme["url"],
-        "text": meme["text"],
-        "tags": meme["tags"],
-        "info": meme["info"]
-    }
-    create_meme_endpoint.create_a_meme(data)
-
+    create_meme_endpoint.create_a_meme(meme)
+    meme_id = create_meme_endpoint.response.json().get('id')
     response = requests.delete(
-        f"{create_meme_endpoint.url}meme/{create_meme_endpoint.response.json()['id']}",
+        f"{create_meme_endpoint.url}meme/{meme_id}",
         headers={"Authorization": create_meme_endpoint.token}
     )
     assert response.status_code == 200
