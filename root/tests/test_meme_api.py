@@ -1,10 +1,11 @@
 import requests
 
-from root.conftest import authorize_user_endpoint
+from root.conftest import authorize_endpoint
 
 
-def test_get_all_memes(authorize_user_endpoint):
-    response = requests.get(
-        "http://167.172.172.115:52355/meme",
-        headers={"Authorization":authorize_user_endpoint.token})
-    print(response)
+def test_get_all_memes(get_memes_endpoint):
+    get_memes_endpoint.get_all_memes()
+
+
+def test_get_one_meme(authorize_endpoint):
+    ...
