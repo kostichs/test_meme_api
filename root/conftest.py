@@ -7,8 +7,10 @@ from root.endpoints.check_token import CheckExistingToken
 def authorize_user_endpoint(get_existing_token_endpoint):
     authorized_user = AuthorizeUser()
     token = authorized_user.get_token()
+    print(token)
     if not get_existing_token_endpoint.is_token_alive(token):
         authorized_user.get_new_token()
+    print("Token:", authorized_user.token)
     return authorized_user
 
 

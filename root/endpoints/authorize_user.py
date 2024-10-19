@@ -5,10 +5,11 @@ from root.endpoints.endpoint import Endpoint
 
 
 class AuthorizeUser(Endpoint):
-    CREDENTIALS_FILE = '../../credentials.json'
+    CREDENTIALS_FILE = 'credentials.json'
     USERNAME = 'sergey'
 
     def get_token(self):
+        print("Get token")
         self.token = self.__get_token_from_file()
         if self.token:
             return self.token
@@ -19,11 +20,14 @@ class AuthorizeUser(Endpoint):
         return self.token
 
     def __get_token_from_file(self):
-        if os.path.exists(self.CREDENTIALS_FILE):
+        if os.path.exists(os.path.join(self.CREDENTIALS_FILE)):
+            print(os.path.join(self.CREDENTIALS_FILE))
             with open(self.CREDENTIALS_FILE, 'r', encoding='utf-8') as file:
                 credentials = json.load(file)
+                print("Credentials")
                 return credentials.get("token")
-        return None
+        print("Credentials2")
+        return self.get_new_token()
 
     def __fetch_token_from_page(self):
         name = {"name": self.USERNAME}
@@ -35,9 +39,7 @@ class AuthorizeUser(Endpoint):
             raise Exception("Failed to get token: " + self.response.text)
 
     def __save_token_to_file(self, token):
+        print("Want to save")
         with open(self.CREDENTIALS_FILE, 'w', encoding='utf-8') as file:
+            print('Opened')
             json.dump({"token": token}, file, ensure_ascii=False)
-
-
-'''test = AuthorizeUser()
-print(test.get_token())'''

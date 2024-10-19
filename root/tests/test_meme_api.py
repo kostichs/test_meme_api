@@ -1,5 +1,7 @@
 import requests
 
+from root.conftest import authorize_user_endpoint
+
 
 def test_get_all_memes(authorize_user_endpoint):
     response = requests.get(
