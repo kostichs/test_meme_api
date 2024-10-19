@@ -29,3 +29,8 @@ def test_create_meme(create_meme_endpoint, meme):
 def test_completely_change_meme(fully_change_meme, create_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
     fully_change_meme.change_meme(data=meme, meme_id=create_meme_endpoint.response.json()['id'])
+
+@pytest.mark.parametrize("meme", MEME_DATA)
+def test_delete_meme(create_meme_endpoint, delete_meme_endpoint, meme):
+    create_meme_endpoint.create_a_meme(data=meme)
+    delete_meme_endpoint.delete_meme(create_meme_endpoint.response.json()['id'])
