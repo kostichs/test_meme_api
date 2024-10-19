@@ -8,7 +8,7 @@ def load_meme_data(filename):
     with open(filename, 'r', encoding='utf-8') as file:
         return json.load(file)
 
-MEME_DATA = load_meme_data(os.path.join(os.path.dirname(__file__), '../data/meme_structure.json'))
+MEME_DATA = load_meme_data(os.path.join(os.path.dirname(__file__), '../data/create_meme_data.json'))
 
 
 def test_get_all_memes(get_memes_endpoint):
@@ -24,3 +24,8 @@ def test_get_one_meme(get_meme_by_id_endpoint, meme_id):
 def test_create_meme(create_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(meme)
 
+
+@pytest.mark.parametrize("meme", MEME_DATA)
+def test_completely_change_meme(fully_change_meme, create_meme_endpoint, meme):
+    create_meme_endpoint.create_a_meme(data=meme)
+    fully_change_meme.change_meme(data=meme, meme_id=create_meme_endpoint.response.json()['id'])

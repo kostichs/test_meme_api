@@ -3,6 +3,7 @@ import requests
 from root.endpoints.authorize_user import AuthorizeUser
 from root.endpoints.check_token import CheckExistingToken
 from root.endpoints.create_meme import CreateMeme
+from root.endpoints.full_change_meme import FullChangeMeme
 from root.endpoints.get_all_memes import GetAllMemes
 from root.endpoints.get_one_meme import GetOneMeme
 
@@ -39,15 +40,14 @@ def create_meme_endpoint(authorize_endpoint):
     created_meme = CreateMeme()
     created_meme.token = authorize_endpoint.token
     yield created_meme
-    resp = requests.delete(
+    requests.delete(
         f"{created_meme.url}meme/{created_meme.response.json()['id']}",
         headers={"Authorization": created_meme.token}
     )
-    print(resp.status_code)
 
 
 @pytest.fixture()
-def create_test_meme(authorize_endpoint):
-    test_meme = CreateMeme()
-    test_meme.token = authorize_endpoint.token
-    return test_meme
+def fully_change_meme(authorize_endpoint):
+    changing_meme = FullChangeMeme()
+    changing_meme.token = authorize_endpoint.token
+    return changing_meme
