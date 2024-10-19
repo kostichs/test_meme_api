@@ -10,7 +10,7 @@ class AuthorizeUser(Endpoint):
     def get_token(self):
         self.token = self.__get_token_from_file()
         if self.token:
-            if self.is_token_alive():
+            if self.__is_token_alive():
                 return self.token
             else:
                 self.token = self.__fetch_token_from_page()
@@ -37,7 +37,7 @@ class AuthorizeUser(Endpoint):
         with open(self.CREDENTIALS_FILE, 'w', encoding='utf-8') as file:
             file.write(json.dumps({"token": token}, ensure_ascii=False))
 
-    def is_token_alive(self):
+    def __is_token_alive(self):
         self.response = requests.get(f"{self.url}authorize/{self.token}")
         return True if self.response.status_code == 200 else False
 
