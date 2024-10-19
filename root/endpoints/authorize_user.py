@@ -10,9 +10,10 @@ class AuthorizeUser(Endpoint):
 
     def get_token(self):
         self.token = self.__get_token_from_file()
-        if self.token and self.__is_token_alive():
+        if self.token:
             return self.token
 
+    def get_new_token(self):
         self.token = self.__fetch_token_from_page()
         self.__save_token_to_file(self.token)
         return self.token
@@ -37,13 +38,6 @@ class AuthorizeUser(Endpoint):
         with open(self.CREDENTIALS_FILE, 'w', encoding='utf-8') as file:
             json.dump({"token": token}, file, ensure_ascii=False)
 
-    def __is_token_alive(self):
-        if not self.token:
-            return False
 
-        self.response = requests.get(f"{self.url}authorize/{self.token}")
-        return self.response.status_code == 200
-
-
-"""test = AuthorizeUser()
-print(test.get_token())"""
+'''test = AuthorizeUser()
+print(test.get_token())'''
