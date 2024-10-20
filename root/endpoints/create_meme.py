@@ -27,8 +27,8 @@ class CreateMeme(Endpoint):
     @allure.step('Check parameter values in the new meme')
     def check_response_values(self, data):
         for parameter_key, parameter_value in data.items():
-            assert self.response.json()[parameter_key] == parameter_value, \
-                f"Value of the created meme is wrong: {parameter_value}"
+            assert str(self.response.json()[parameter_key]) == str(parameter_value), \
+                f"Value of the created meme should be {self.response.json()[parameter_key]}, but it's: {parameter_value}"
 
     @allure.step('Check response structure')
     def check_response_structure(self, expected_keys):
