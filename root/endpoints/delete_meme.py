@@ -13,20 +13,10 @@ class DeleteMeme(Endpoint):
         except requests.exceptions.JSONDecodeError:
             self.meme_id = ""
 
-    @allure.step('Check the re-deletion of the deleted meme')
-    def check_meme_deleted(self, meme_id):
+    @allure.step('Check response 404: Re-deletion, Non-existing meme, invalid id')
+    def check_response_404(self, meme_id):
         response = requests.get(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
         assert response.status_code == 404, f"Unexpected status code: {self.response.status_code}"
-
-    @allure.step('Attempt to delete a non-existing meme')
-    def delete_non_existing_meme(self, meme_id):
-        self.response = requests.delete(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
-        assert self.response.status_code == 404, f"Unexpected status code: {self.response.status_code}"
-
-    @allure.step('Attempt to delete a meme with invalid ID format')
-    def delete_meme_with_invalid_id(self, meme_id):
-        self.response = requests.delete(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
-        assert self.response.status_code == 404, f"Unexpected status code: {self.response.status_code}"
 
     @allure.step('Attempt to delete a meme without authorization')
     def delete_meme_without_auth(self, meme_id):

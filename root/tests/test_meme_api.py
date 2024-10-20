@@ -73,8 +73,16 @@ def test_delete_meme(create_meme_endpoint, delete_meme_endpoint, meme):
     delete_meme_endpoint.check_success()
     delete_meme_endpoint.check_response_time()
 
-    delete_meme_endpoint.check_meme_deleted(meme_id)
-    delete_meme_endpoint.delete_non_existing_meme(meme_id)
-    delete_meme_endpoint.delete_meme_with_invalid_id("invalid_id")
-    delete_meme_endpoint.delete_meme_without_auth(meme_id)
 
+@pytest.mark.parametrize("meme", MEME_DATA)
+def test_delete_meme_with_negative_case(create_meme_endpoint, delete_meme_endpoint, meme):
+    create_meme_endpoint.create_a_meme(data=meme)
+    meme_id = create_meme_endpoint.meme_id
+    delete_meme_endpoint.delete_meme_without_auth(meme_id)
+    delete_meme_endpoint.delete_meme(meme_id)
+    delete_meme_endpoint.check_response_404(meme_id)
+
+
+@pytest.mark.parametrize('fake_id', [999999, "invalid_id", -1])
+def test_delete_meme_with_fake_id(delete_meme_endpoint, fake_id):
+    delete_meme_endpoint.check_response_404(fake_id)
