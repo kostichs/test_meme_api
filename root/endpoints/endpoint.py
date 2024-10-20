@@ -10,7 +10,6 @@ class Endpoint:
     meme_id = []
     token = None
     headers = None
-    default_data = None
     max_time = 2
 
     @allure.step('Check 200 status code')
