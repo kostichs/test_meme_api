@@ -7,16 +7,19 @@ import allure
 
 class AuthorizeUser(Endpoint):
 
+    @allure.step('Check if the old token is still valid')
     def get_old_token(self):
         self.token = self.__get_token_from_file()
         if self.token:
             return self.token
 
+    @allure.step('Getting a new token')
     def get_new_token(self):
         self.token = self.__load_token_from_page()
         self.__save_token_to_file(self.token)
         self.check_response_200()
 
+    @allure.step('Check if there is a saved valid token in a file')
     def __get_token_from_file(self):
         if os.path.exists(self.CREDENTIALS_FILE):
             with open(self.CREDENTIALS_FILE, 'r', encoding='utf-8') as file:
@@ -27,7 +30,6 @@ class AuthorizeUser(Endpoint):
     def __load_token_from_page(self):
         name = {"name": self.USERNAME}
         self.response = requests.post(self.url + 'authorize', json=name)
-
         if self.response.status_code == 200:
             return self.response.json()["token"]
         else:

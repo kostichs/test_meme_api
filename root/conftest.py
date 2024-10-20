@@ -4,7 +4,7 @@ from root.endpoints.authorize_user import AuthorizeUser
 from root.endpoints.check_token import CheckExistingToken
 from root.endpoints.create_meme import CreateMeme
 from root.endpoints.delete_meme import DeleteMeme
-from root.endpoints.full_change_meme import FullChangeMeme
+from root.endpoints.change_meme import FullChangeMeme
 from root.endpoints.get_all_memes import GetAllMemes
 from root.endpoints.get_one_meme import GetOneMeme
 
