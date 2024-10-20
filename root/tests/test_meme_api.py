@@ -58,7 +58,7 @@ def test_create_meme(create_meme_endpoint, meme):
 @pytest.mark.parametrize("meme", MEME_DATA)
 def test_completely_change_meme(fully_change_meme, create_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
-    fully_change_meme.change_meme(data=meme, meme_id=create_meme_endpoint.response.json()['id'])
+    fully_change_meme.change_meme(data=meme, meme_id=create_meme_endpoint.meme_id)
     fully_change_meme.check_success()
     fully_change_meme.check_response_values(meme)
     fully_change_meme.check_response_structure(meme.keys())
@@ -68,11 +68,13 @@ def test_completely_change_meme(fully_change_meme, create_meme_endpoint, meme):
 @pytest.mark.parametrize("meme", MEME_DATA)
 def test_delete_meme(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
-    meme_id = create_meme_endpoint.response.json()['id']
+    meme_id = create_meme_endpoint.meme_id
     delete_meme_endpoint.delete_meme(meme_id)
     delete_meme_endpoint.check_success()
+    delete_meme_endpoint.check_response_time()
+
     delete_meme_endpoint.check_meme_deleted(meme_id)
     delete_meme_endpoint.delete_non_existing_meme(meme_id)
     delete_meme_endpoint.delete_meme_with_invalid_id("invalid_id")
     delete_meme_endpoint.delete_meme_without_auth(meme_id)
-    delete_meme_endpoint.check_response_time()
+

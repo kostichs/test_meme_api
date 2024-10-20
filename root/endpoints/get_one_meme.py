@@ -11,6 +11,7 @@ class GetOneMeme(Endpoint):
             f"{self.url}meme/{meme_id}",
             headers={"Authorization": self.token}
         )
+        self.meme_id = self.response.json()['id']
 
     @allure.step('Check for 404 status code when meme does not exist')
     def check_meme_not_found(self, meme_id):

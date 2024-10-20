@@ -10,6 +10,7 @@ class CreateMeme(Endpoint):
         self.response = requests.post(f"{self.url}/meme", json=data, headers=headers)
         try:
             self.response_json = self.response.json()
+            self.meme_id = self.response.json()['id']
         except requests.exceptions.JSONDecodeError:
             self.response_json = ""
 

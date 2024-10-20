@@ -15,6 +15,7 @@ class FullChangeMeme(Endpoint):
         )
         try:
             self.response_json = self.response.json()
+            self.meme_id = self.response.json()['id']
         except requests.exceptions.JSONDecodeError:
             self.response_json = ""
 
