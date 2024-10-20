@@ -19,6 +19,6 @@ class DeleteMeme(Endpoint):
         assert response.status_code == 404, f"Unexpected status code: {self.response.status_code}"
 
     @allure.step('Attempt to delete a meme without authorization')
-    def delete_meme_without_auth(self, meme_id):
+    def delete_meme_unauthorized(self, meme_id):
         self.response = requests.delete(f"{self.url}meme/{meme_id}")
         assert self.response.status_code == 401, f"Unexpected status code: {self.response.status_code}"

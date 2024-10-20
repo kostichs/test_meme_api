@@ -51,6 +51,6 @@ class CreateMeme(Endpoint):
         assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
 
     @allure.step('Create a meme by unauthorized user')
-    def create_meme_with_unauthorized_user(self, data):
+    def create_meme_unauthorized(self, data):
         response = requests.post(f"{self.url}/meme", json=data)
         assert response.status_code == 401, f"Unexpected status code: {response.status_code}"

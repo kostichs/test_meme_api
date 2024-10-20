@@ -39,6 +39,6 @@ class GetAllMemes(Endpoint):
         assert response.status_code == 401, "Expected unauthorized status code"
 
     @allure.step('Check for invalid URL')
-    def check_invalid_url(self):
-        response = requests.get(f"{self.url}/invalid_meme", headers={"Authorization": self.token})
+    def check_invalid_url(self, data):
+        response = requests.get(f"{self.url}{data}", headers={"Authorization": self.token})
         assert response.status_code == 404, "Expected not found status code"

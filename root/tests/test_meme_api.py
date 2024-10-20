@@ -20,9 +20,10 @@ def test_get_all_memes(get_memes_endpoint):
     get_memes_endpoint.check_response_time()
 
 
-def test_get_all_memes_with_negative_cases(get_memes_endpoint):
+@pytest.mark.parametrize('data', ["invalid_url", "meme01", None])
+def test_get_all_memes_with_negative_cases(get_memes_endpoint, data):
     get_memes_endpoint.check_unauthorized_access()
-    get_memes_endpoint.check_invalid_url()
+    get_memes_endpoint.check_invalid_url(data)
 
 
 @pytest.mark.parametrize('meme_id', MEME_IDS)
@@ -51,7 +52,7 @@ def test_create_meme(create_meme_endpoint, meme):
     create_meme_endpoint.check_response_values(meme)
     create_meme_endpoint.check_response_structure(MEME_KEYS)
     create_meme_endpoint.check_duplicate_creation(meme)
-    create_meme_endpoint.create_meme_with_unauthorized_user(meme)
+    create_meme_endpoint.create_meme_unauthorized(meme)
     create_meme_endpoint.check_response_time()
 
 
@@ -78,7 +79,7 @@ def test_delete_meme(create_meme_endpoint, delete_meme_endpoint, meme):
 def test_delete_meme_with_negative_case(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
     meme_id = create_meme_endpoint.meme_id
-    delete_meme_endpoint.delete_meme_without_auth(meme_id)
+    delete_meme_endpoint.delete_meme_unauthorized(meme_id)
     delete_meme_endpoint.delete_meme(meme_id)
     delete_meme_endpoint.check_response_404(meme_id)
 
