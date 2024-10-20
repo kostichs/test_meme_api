@@ -13,9 +13,6 @@ class CreateMeme(Endpoint):
         except requests.exceptions.JSONDecodeError:
             self.response_json = ""
 
-    @allure.step("Check success")
-    def check_success(self):
-        assert self.response.status_code == 200, f"Unexpected status code: {self.response.status_code}"
 
     @allure.step('Check parameter values in the new meme')
     def check_response_values(self, data):

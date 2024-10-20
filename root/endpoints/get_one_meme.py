@@ -12,10 +12,6 @@ class GetOneMeme(Endpoint):
             headers={"Authorization": self.token}
         )
 
-    @allure.step('Check success')
-    def check_success(self):
-        assert self.response.status_code == 200, f"Unexpected status code: {self.response.status_code}"
-
     @allure.step('Check for 404 status code when meme does not exist')
     def check_meme_not_found(self, meme_id):
         self.response = requests.get(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
@@ -36,7 +32,3 @@ class GetOneMeme(Endpoint):
     def check_response_not_empty(self):
         response_json = self.response.json()
         assert response_json, "Response is empty"
-
-    @allure.step('Check response time')
-    def check_response_time(self, max_time):
-        assert self.response.elapsed.total_seconds() < max_time, f"Response time exceeded {max_time} seconds"

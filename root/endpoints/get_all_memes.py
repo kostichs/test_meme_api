@@ -12,10 +12,6 @@ class GetAllMemes(Endpoint):
             headers={"Authorization": self.token}
         )
 
-    @allure.step('Check successful response')
-    def check_success(self):
-        assert self.response.status_code == 200, f"Unexpected status code: {self.response.status_code}"
-
     @allure.step('Check response structure for all memes')
     def check_response_structure(self, expected_keys):
         response_json = self.response.json()

@@ -2,7 +2,7 @@ import os
 import json
 import requests
 from root.endpoints.endpoint import Endpoint
-
+import allure
 
 class AuthorizeUser(Endpoint):
     CREDENTIALS_FILE = 'credentials.json'
@@ -19,7 +19,7 @@ class AuthorizeUser(Endpoint):
         return self.token
 
     def __get_token_from_file(self):
-        if os.path.exists(os.path.join(self.CREDENTIALS_FILE)):
+        if os.path.exists(self.CREDENTIALS_FILE):
             with open(self.CREDENTIALS_FILE, 'r', encoding='utf-8') as file:
                 credentials = json.load(file)
                 return credentials.get("token")
@@ -37,3 +37,11 @@ class AuthorizeUser(Endpoint):
     def __save_token_to_file(self, token):
         with open(self.CREDENTIALS_FILE, 'w', encoding='utf-8') as file:
             json.dump({"token": token}, file, ensure_ascii=False)
+
+    @allure.step('Check if token is valid')
+    def check_token(self):
+        assert "token" in self.response.json(), "Token is missing in the response"
+
+    @allure.step('Check Username matching')
+    def check_username(self):
+        assert self.response.json()['user'] == self.USERNAME, f"Username is wrong: {self.response.json()['user']}"

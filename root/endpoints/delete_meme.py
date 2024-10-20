@@ -9,10 +9,6 @@ class DeleteMeme(Endpoint):
     def delete_meme(self, meme_id):
         self.response = requests.delete(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
 
-    @allure.step("Check successful deletion")
-    def check_success(self):
-        assert self.response.status_code == 200, f"Unexpected status code: {self.response.status_code}"
-
     @allure.step('Check the re-deletion of the deleted meme')
     def check_meme_deleted(self, meme_id):
         response = requests.get(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
