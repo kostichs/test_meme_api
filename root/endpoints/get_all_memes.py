@@ -11,6 +11,7 @@ class GetAllMemes(Endpoint):
             f"{self.url}/meme",
             headers={"Authorization": self.token}
         )
+        self.check_response_200()
 
     @allure.step('Check response structure for all memes')
     def check_response_structure(self, expected_keys):

@@ -10,6 +10,7 @@ class DeleteMeme(Endpoint):
         self.response = requests.delete(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
         try:
             self.meme_id.append(self.response.json().get('id', ''))
+            self.check_response_200()
         except requests.exceptions.JSONDecodeError:
             self.meme_id = ""
 

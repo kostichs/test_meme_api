@@ -4,9 +4,8 @@ import requests
 from root.endpoints.endpoint import Endpoint
 import allure
 
+
 class AuthorizeUser(Endpoint):
-    CREDENTIALS_FILE = 'credentials.json'
-    USERNAME = 'sergey'
 
     def get_old_token(self):
         self.token = self.__get_token_from_file()
@@ -14,9 +13,9 @@ class AuthorizeUser(Endpoint):
             return self.token
 
     def get_new_token(self):
-        self.token = self.__fetch_token_from_page()
+        self.token = self.__load_token_from_page()
         self.__save_token_to_file(self.token)
-        return self.token
+        self.check_response_200()
 
     def __get_token_from_file(self):
         if os.path.exists(self.CREDENTIALS_FILE):
@@ -25,7 +24,7 @@ class AuthorizeUser(Endpoint):
                 return credentials.get("token")
         return self.get_new_token()
 
-    def __fetch_token_from_page(self):
+    def __load_token_from_page(self):
         name = {"name": self.USERNAME}
         self.response = requests.post(self.url + 'authorize', json=name)
 

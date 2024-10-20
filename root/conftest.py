@@ -51,7 +51,7 @@ def create_meme_endpoint(authorize_endpoint):
 
 
 @pytest.fixture()
-def fully_change_meme(authorize_endpoint):
+def change_meme_endpoint(authorize_endpoint):
     changing_meme = FullChangeMeme()
     changing_meme.token = authorize_endpoint.token
     return changing_meme

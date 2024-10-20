@@ -4,7 +4,7 @@ from root.endpoints.endpoint import Endpoint
 
 
 class CreateMeme(Endpoint):
-    @allure.step('Create a new object with POST method')
+    @allure.step('Create a new meme with valid data')
     def create_a_meme(self, data=None, headers=None):
         headers = headers if headers else {"Authorization": self.token}
         data = data if data else self.default_data
@@ -12,8 +12,17 @@ class CreateMeme(Endpoint):
         try:
             self.response_json = self.response.json()
             self.meme_id.append(self.response.json()['id'])
+            self.check_response_200()
         except requests.exceptions.JSONDecodeError:
+            print("STATUS CODE:", self.response.status_code)
             self.response_json = ""
+
+    @allure.step('Create a new meme with invalid data')
+    def create_a_meme_with_invalid_data(self, data=None, headers=None):
+        headers = headers if headers else {"Authorization": self.token}
+        data = data if data else self.default_data
+        self.response = requests.post(f"{self.url}/meme", json=data, headers=headers)
+        self.check_response_400()
 
     @allure.step('Check parameter values in the new meme')
     def check_response_values(self, data):
