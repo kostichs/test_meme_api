@@ -5,30 +5,24 @@ from root.endpoints.endpoint import Endpoint
 
 class CreateMeme(Endpoint):
     @allure.step('Create a new meme with valid data')
-    def create_a_meme(self, data=None, headers=None):
-        headers = headers if headers else {"Authorization": self.token}
-        data = data if data else self.default_data
-        self.response = requests.post(f"{self.url}/meme", json=data, headers=headers)
+    def create_a_meme(self, data):
+        self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
         try:
-            self.response_json = self.response.json()
             self.meme_id.append(self.response.json()['id'])
             self.check_response_200()
-        except requests.exceptions.JSONDecodeError:
-            print("STATUS CODE:", self.response.status_code)
-            self.response_json = ""
+        except requests.exceptions.JSONDecodeError as e:
+            print(e)
 
     @allure.step('Create a new meme with invalid data')
-    def create_a_meme_with_invalid_data(self, data=None, headers=None):
-        headers = headers if headers else {"Authorization": self.token}
-        data = data if data else self.default_data
-        self.response = requests.post(f"{self.url}/meme", json=data, headers=headers)
+    def create_a_meme_with_invalid_data(self, data):
+        self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
         self.check_response_400()
 
     @allure.step('Check parameter values in the new meme')
     def check_response_values(self, data):
         for parameter_key, parameter_value in data.items():
             assert str(self.response.json()[parameter_key]) == str(parameter_value), \
-                f"Value of the created meme should be {self.response.json()[parameter_key]}, but it's: {parameter_value}"
+                f"Value of meme should be {self.response.json()[parameter_key]}, but it's: {parameter_value}"
 
     @allure.step('Check response structure')
     def check_response_structure(self, expected_keys):
@@ -45,13 +39,6 @@ class CreateMeme(Endpoint):
     def check_invalid_data(self, data):
         self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
         self.check_response_200()
-
-    @allure.step('Check for required parameters')
-    def check_missing_required_parameters(self, missing_params):
-        for param in missing_params:
-            data = {k: v for k, v in self.default_data.items() if k != param}
-            self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
-            self.check_response_400()
 
     @allure.step('Check for duplicate creation')
     def check_duplicate_creation(self, data):

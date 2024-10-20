@@ -22,13 +22,6 @@ class GetAllMemes(Endpoint):
             for key in expected_keys:
                 assert key in meme, f"Key '{key}' not found in meme: {meme}"
 
-    @allure.step('Check values in memes')
-    def check_meme_values(self, expected_data):
-        response_json = self.response.json()
-        for meme in response_json:
-            for key, expected_value in expected_data.items():
-                assert meme[key] == expected_value, f"Value of '{key}' is wrong in meme {meme['id']}: '{meme[key]}'"
-
     @allure.step('Check if response is not empty')
     def check_response_not_empty(self):
         response_json = self.response.json()

@@ -5,11 +5,9 @@ class Endpoint:
     CREDENTIALS_FILE = 'credentials.json'
     USERNAME = 'sergey'
     url = 'http://167.172.172.115:52355/'
-    response = None
-    response_json = None
     meme_id = []
+    response = None
     token = None
-    headers = None
     max_time = 2
 
     @allure.step('Check 200 status code')

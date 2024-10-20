@@ -115,7 +115,7 @@ def test_change_meme(change_meme_endpoint, create_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
     change_meme_endpoint.change_meme(data=meme, meme_id=create_meme_endpoint.get_meme_id)
     change_meme_endpoint.check_changer_name()
-    change_meme_endpoint.check_response_values(meme)
+    change_meme_endpoint.check_response_values(data=meme)
     change_meme_endpoint.check_response_structure(meme.keys())
     change_meme_endpoint.check_response_time()
 
