@@ -15,7 +15,7 @@ class FullChangeMeme(Endpoint):
         )
         try:
             self.response_json = self.response.json()
-            self.meme_id = self.response.json()['id']
+            self.meme_id.append(self.response.json()['id'])
         except requests.exceptions.JSONDecodeError:
             self.response_json = ""
 
@@ -43,7 +43,7 @@ class FullChangeMeme(Endpoint):
             json=data,
             headers={"Authorization": self.token}
         )
-        assert self.response.status_code == 404, f"Unexpected status code: {self.response.status_code}"
+        self.check_response_404()
 
     @allure.step('Check for required parameters')
     def check_missing_required_parameters(self, missing_params, meme_id):
@@ -54,4 +54,9 @@ class FullChangeMeme(Endpoint):
                 json=data,
                 headers={"Authorization": self.token}
             )
-            assert response.status_code == 404, f"Unexpected status code: {response.status_code}"
+            self.check_response_404()
+
+    @allure.step('Change meme by unauthorized user')
+    def change_meme_unauthorized(self, data):
+        self.response = requests.put(f"{self.url}/meme/{self.get_meme_id}", json=data)
+        self.check_response_401()

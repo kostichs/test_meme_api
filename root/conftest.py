@@ -42,10 +42,12 @@ def create_meme_endpoint(authorize_endpoint):
     created_meme = CreateMeme()
     created_meme.token = authorize_endpoint.token
     yield created_meme
-    requests.delete(
-        f"{created_meme.url}meme/{created_meme.response.json()['id']}",
-        headers={"Authorization": created_meme.token}
-    )
+    if created_meme.meme_id is not None:
+        for _id in created_meme.meme_id:
+            requests.delete(
+                f"{created_meme.url}meme/{_id}",
+                headers={"Authorization": created_meme.token}
+            )
 
 
 @pytest.fixture()
