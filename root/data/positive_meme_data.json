@@ -25,5 +25,14 @@
         "tags": ["sketch", "don't know"],
         "url": "https://a.d-cd.net/AoA41pXHKdMWXS3OjuY_OpbSy_Q-1920.jpg",
         "text": "I don't know"
+    },
+    {
+        "info": {
+            "colors": ["black", "white", "yellow"],
+            "objects": ["picture", "text"]
+        },
+        "tags": ["wolf", "sketch"],
+        "url": "https://avatars.mds.yandex.net/i?id=851226530bd5e8816045f00f455f5a1c_l-5319478-images-thumbs&n=13",
+        "text": "Thanks a lot!"
     }
 ]

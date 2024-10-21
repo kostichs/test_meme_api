@@ -112,12 +112,11 @@ def test_change_meme_unauthorized(change_meme_endpoint, create_meme_endpoint, me
     change_meme_endpoint.change_meme_unauthorized(data=meme, meme_id=create_meme_endpoint.meme_id)
 
 
-@pytest.mark.parametrize("valid_meme, invalid_meme",
-                         [(positive, negative) for positive, negative in zip(MEME_DATA_POSITIVE, MEME_DATA_NEGATIVE)])
+@pytest.mark.parametrize("valid_meme, invalid_meme", zip(MEME_DATA_POSITIVE, MEME_DATA_NEGATIVE))
 @allure.feature('Memes')
 @allure.story('Change meme with invalid data')
 @allure.title('Test change meme with invalid data')
-def test_change_meme_with_invalid_datas(change_meme_endpoint, create_meme_endpoint, valid_meme, invalid_meme):
+def test_change_meme_with_invalid_data(change_meme_endpoint, create_meme_endpoint, valid_meme, invalid_meme):
     create_meme_endpoint.create_a_meme(valid_meme)
     change_meme_endpoint.check_invalid_data(data=invalid_meme, meme_id=create_meme_endpoint.meme_id)
 
