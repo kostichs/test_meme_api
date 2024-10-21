@@ -7,7 +7,6 @@ class Endpoint:
     url = 'http://167.172.172.115:52355/'
     max_time = 2
     response = None
-    token = None
 
     @property
     def token(self):

@@ -4,15 +4,26 @@ from root.endpoints.endpoint import Endpoint
 
 
 class CreateMeme(Endpoint):
-    duplicate_id = None
 
     def __init__(self):
         self.meme_id = None
+        self.duplicate_id = None
 
     @allure.step('Create a new meme with valid data')
     def create_a_meme(self, data):
         self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
-        self.meme_id = self.response.json()['id']
+        if self.response.status_code == 200:
+            try:
+                self.meme_id = self.response.json().get('id')
+                if not self.meme_id:
+                    raise ValueError("Meme ID not found in the response.")
+            except Exception as e:
+                print(f"Failed to parse meme ID: {str(e)}")
+                raise
+        else:
+            print(
+                f"Failed to create meme. Status code: {self.response.status_code}, Response: {self.response.text}")
+            raise Exception(f"Unexpected status code: {self.response.status_code}")
         self.check_response_200()
 
     @allure.step('Create a new meme with invalid data')
@@ -46,7 +57,7 @@ class CreateMeme(Endpoint):
     def check_duplicate_creation(self, data):
         self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
         self.check_response_200()
-        # There is a duplicate meme I have to delete separately from original one
+        # There is a duplicate meme, so it will be deleted separately by duplicate_id
         self.duplicate_id = self.response.json()['id']
 
     @allure.step('Create a meme by unauthorized user')

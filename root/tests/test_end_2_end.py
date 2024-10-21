@@ -5,7 +5,7 @@ from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, M
 
 
 @pytest.mark.smoke
-# @pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
+@pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
 @allure.feature('End-to-End Flow')
 @allure.story('Complete meme lifecycle')
 @allure.title('Test end-to-end meme lifecycle')

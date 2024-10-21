@@ -3,7 +3,7 @@ import allure
 from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, MEME_DATA_NEGATIVE
 
 
-# @pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
+@pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
 @allure.feature('Authorization')
 @allure.story('User authorization')
 @allure.title('Test user authorization flow')
@@ -135,7 +135,7 @@ def test_delete_meme(create_meme_endpoint, delete_meme_endpoint, meme):
 
 @pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
 @allure.feature('Memes')
-@allure.story('Negative cases for delete meme')
+@allure.story('Negative cases for delete meme unauthorized and with re-deletion')
 @allure.title('Test delete meme with negative case')
 def test_delete_meme_with_negative_case(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)

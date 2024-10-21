@@ -18,4 +18,5 @@ class DeleteMeme(Endpoint):
     @allure.step('Attempt to delete a meme without authorization')
     def delete_meme_unauthorized(self, meme_id):
         self.response = requests.delete(f"{self.url}meme/{meme_id}")
+        print("UNauthorized:", self.response.status_code)
         self.check_response_401()
