@@ -37,7 +37,7 @@ def get_meme_by_id_endpoint(authorize_endpoint):
     return meme
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def create_meme_endpoint(authorize_endpoint):
     created_meme = CreateMeme()
     created_meme.token = authorize_endpoint.token

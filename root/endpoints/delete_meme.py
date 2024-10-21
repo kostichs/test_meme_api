@@ -8,11 +8,7 @@ class DeleteMeme(Endpoint):
     @allure.step('Delete an object using DELETE method')
     def delete_meme(self, meme_id):
         self.response = requests.delete(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
-        try:
-            self.meme_id = self.response.json().get('id', '')
-            self.check_response_200()
-        except requests.exceptions.JSONDecodeError:
-            print("JSONDecodeError")
+        self.check_response_200()
 
     @allure.step('Check response 404: Re-deletion, Non-existing meme, invalid id')
     def check_negative_deletion(self, meme_id):

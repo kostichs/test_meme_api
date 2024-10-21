@@ -12,7 +12,7 @@ class CreateMeme(Endpoint):
             self.meme_id = self.response.json()['id']
             self.check_response_200()
         except requests.exceptions.JSONDecodeError as e:
-            print(e)
+            print(e, "Test create meme")
 
     @allure.step('Create a new meme with invalid data')
     def create_a_meme_with_invalid_data(self, data):
