@@ -14,7 +14,7 @@ class ObjectUser(HttpUser):
         self.token = authorized_user.get_old_token()
         self.headers = {"Authorization": self.token}
 
-    @task(1)
+    @task(2)
     def get_all_memes(self):
         self.client.get(
             '/meme',
@@ -31,7 +31,7 @@ class ObjectUser(HttpUser):
                 headers=self.headers
             )
 
-    @task(3)
+    @task(5)
     def create_meme(self):
         data = random.choice(MEME_DATA_POSITIVE)
         response = self.client.post(
@@ -52,7 +52,7 @@ class ObjectUser(HttpUser):
             headers=self.headers
         )
 
-    @task(2)
+    @task(3)
     def change_meme(self):
         if self.meme_id:
             data = random.choice(MEME_DATA_POSITIVE)
