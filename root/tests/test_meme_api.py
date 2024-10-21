@@ -9,7 +9,7 @@ from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, M
 @allure.title('Test user authorization flow')
 def test_authorize_user(authorize_endpoint):
     authorize_endpoint.get_new_token()
-    authorize_endpoint.get_old_token()
+    authorize_endpoint.get_token()
     authorize_endpoint.check_token()
     authorize_endpoint.check_username()
     authorize_endpoint.check_response_time()

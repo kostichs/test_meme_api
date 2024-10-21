@@ -8,10 +8,8 @@ import allure
 class AuthorizeUser(Endpoint):
 
     @allure.step('Check if the old token is still valid')
-    def get_old_token(self):
-        self.token = self.__get_token_from_file()
-        if self.token:
-            return self.token
+    def get_token(self):
+        Endpoint.token = self.__get_token_from_file()
 
     @allure.step('Getting a new token')
     def get_new_token(self):

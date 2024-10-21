@@ -8,7 +8,14 @@ class Endpoint:
     max_time = 2
     response = None
     token = None
-    meme_id = None
+
+    @property
+    def token(self):
+        return Endpoint.token
+
+    @token.setter
+    def token(self, value):
+        Endpoint.token = value
 
     @allure.step('Check 200 status code')
     def check_response_200(self):

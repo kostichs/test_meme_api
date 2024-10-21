@@ -11,7 +11,7 @@ class ObjectUser(HttpUser):
 
     def on_start(self):
         authorized_user = AuthorizeUser()
-        self.token = authorized_user.get_old_token()
+        self.token = authorized_user.get_token()
         self.headers = {"Authorization": self.token}
 
     @task(2)

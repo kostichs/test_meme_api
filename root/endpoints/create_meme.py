@@ -6,6 +6,9 @@ from root.endpoints.endpoint import Endpoint
 class CreateMeme(Endpoint):
     duplicate_id = None
 
+    def __init__(self):
+        self.meme_id = None
+
     @allure.step('Create a new meme with valid data')
     def create_a_meme(self, data):
         self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
