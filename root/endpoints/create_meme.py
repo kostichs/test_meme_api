@@ -4,11 +4,12 @@ from root.endpoints.endpoint import Endpoint
 
 
 class CreateMeme(Endpoint):
+
     @allure.step('Create a new meme with valid data')
     def create_a_meme(self, data):
         self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
         try:
-            self.meme_id.append(self.response.json()['id'])
+            self.meme_id = self.response.json()['id']
             self.check_response_200()
         except requests.exceptions.JSONDecodeError as e:
             print(e)
@@ -20,9 +21,9 @@ class CreateMeme(Endpoint):
 
     @allure.step('Check parameter values in the new meme')
     def check_response_values(self, data):
-        for parameter_key, parameter_value in data.items():
-            assert str(self.response.json()[parameter_key]) == str(parameter_value), \
-                f"Value of meme should be {self.response.json()[parameter_key]}, but it's: {parameter_value}"
+        for key, value in data.items():
+            assert str(self.response.json()[key]) == str(value), \
+                f"Value of meme should be {self.response.json()[key]}, but it's: {value}"
 
     @allure.step('Check response structure')
     def check_response_structure(self, expected_keys):

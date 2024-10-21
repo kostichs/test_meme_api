@@ -1,27 +1,9 @@
 import pytest
 import allure
-import random
 from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, MEME_DATA_NEGATIVE
 
 
-@pytest.mark.smoke
-@pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
-@allure.feature('End-to-End Flow')
-@allure.story('Complete meme lifecycle')
-@allure.title('Test end-to-end meme lifecycle')
-@pytest.mark.parametrize("meme", [random.choice(MEME_DATA_POSITIVE)])
-def test_end_to_end(authorize_endpoint, create_meme_endpoint, get_memes_endpoint,
-                    change_meme_endpoint, get_meme_by_id_endpoint, delete_meme_endpoint, meme):
-    authorize_endpoint.get_new_token()
-    get_memes_endpoint.get_all_memes()
-    create_meme_endpoint.create_a_meme(data=meme)
-    meme_id = create_meme_endpoint.get_meme_id
-    get_meme_by_id_endpoint.get_one_meme(meme_id)
-    change_meme_endpoint.change_meme(data=meme, meme_id=meme_id)
-    delete_meme_endpoint.delete_meme(meme_id=meme_id)
-
-
-@pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
+# @pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
 @allure.feature('Authorization')
 @allure.story('User authorization')
 @allure.title('Test user authorization flow')
@@ -83,7 +65,7 @@ def test_get_meme_unauthorized(get_meme_by_id_endpoint, meme_id):
 @allure.feature('Memes')
 @allure.story('Create meme')
 @allure.title('Test create meme')
-def test_create_meme(create_meme_endpoint, meme):
+def test_create_meme(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(meme)
     create_meme_endpoint.check_response_time()
     create_meme_endpoint.check_response_values(meme)
@@ -113,7 +95,7 @@ def test_create_meme_unauthorized(create_meme_endpoint, meme):
 @allure.title('Test change meme')
 def test_change_meme(change_meme_endpoint, create_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
-    change_meme_endpoint.change_meme(data=meme, meme_id=create_meme_endpoint.get_meme_id)
+    change_meme_endpoint.change_meme(data=meme, meme_id=create_meme_endpoint.meme_id)
     change_meme_endpoint.check_changer_name()
     change_meme_endpoint.check_response_values(data=meme)
     change_meme_endpoint.check_response_structure(meme.keys())
@@ -126,7 +108,7 @@ def test_change_meme(change_meme_endpoint, create_meme_endpoint, meme):
 @allure.title('Test change meme unauthorized')
 def test_change_meme_unauthorized(change_meme_endpoint, create_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
-    change_meme_endpoint.change_meme_unauthorized(data=meme, meme_id=create_meme_endpoint.get_meme_id)
+    change_meme_endpoint.change_meme_unauthorized(data=meme, meme_id=create_meme_endpoint.meme_id)
 
 
 @pytest.mark.parametrize("valid_meme, invalid_meme",
@@ -136,7 +118,7 @@ def test_change_meme_unauthorized(change_meme_endpoint, create_meme_endpoint, me
 @allure.title('Test change meme with invalid data')
 def test_change_meme_with_invalid_datas(change_meme_endpoint, create_meme_endpoint, valid_meme, invalid_meme):
     create_meme_endpoint.create_a_meme(valid_meme)
-    change_meme_endpoint.check_invalid_data(data=invalid_meme, meme_id=create_meme_endpoint.get_meme_id)
+    change_meme_endpoint.check_invalid_data(data=invalid_meme, meme_id=create_meme_endpoint.meme_id)
 
 
 @pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
@@ -145,7 +127,7 @@ def test_change_meme_with_invalid_datas(change_meme_endpoint, create_meme_endpoi
 @allure.title('Test delete meme')
 def test_delete_meme(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
-    meme_id = create_meme_endpoint.get_meme_id
+    meme_id = create_meme_endpoint.meme_id
     delete_meme_endpoint.delete_meme(meme_id)
     delete_meme_endpoint.check_response_time()
 
@@ -156,7 +138,7 @@ def test_delete_meme(create_meme_endpoint, delete_meme_endpoint, meme):
 @allure.title('Test delete meme with negative case')
 def test_delete_meme_with_negative_case(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme)
-    meme_id = create_meme_endpoint.get_meme_id
+    meme_id = create_meme_endpoint.meme_id
     delete_meme_endpoint.delete_meme_unauthorized(meme_id)
     delete_meme_endpoint.delete_meme(meme_id)
     delete_meme_endpoint.check_negative_deletion(meme_id)

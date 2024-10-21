@@ -14,11 +14,10 @@ class FullChangeMeme(Endpoint):
             headers={"Authorization": self.token}
         )
         try:
-            self.response_json = self.response.json()
-            self.meme_id.append(self.response.json()['id'])
+            self.meme_id = self.response.json()['id']
             self.check_response_200()
         except requests.exceptions.JSONDecodeError:
-            self.response_json = ""
+            print("JSONDecodeError")
 
     @allure.step('Check parameter values in the updated meme')
     def check_response_values(self, data):

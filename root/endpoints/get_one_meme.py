@@ -11,7 +11,7 @@ class GetOneMeme(Endpoint):
             f"{self.url}meme/{meme_id}",
             headers={"Authorization": self.token}
         )
-        self.meme_id.append(self.response.json()['id'])
+        self.meme_id = self.response.json()['id']
         self.check_response_200()
 
     @allure.step('Check for 404 status code when meme does not exist')
@@ -21,9 +21,8 @@ class GetOneMeme(Endpoint):
 
     @allure.step('Check response structure')
     def check_response_structure(self, expected_keys):
-        response_json = self.response.json()
         for key in expected_keys:
-            assert key in response_json, f"Key '{key}' not found in response"
+            assert key in self.response.json(), f"Key '{key}' not found in response"
 
     @allure.step('Check unauthorized access')
     def check_unauthorized_access(self, meme_id):
@@ -32,5 +31,4 @@ class GetOneMeme(Endpoint):
 
     @allure.step('Check that response is not empty')
     def check_response_not_empty(self):
-        response_json = self.response.json()
-        assert response_json, "Response is empty"
+        assert len(self.response.json()) > 0, "Response is empty"

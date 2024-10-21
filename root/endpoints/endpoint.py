@@ -5,10 +5,10 @@ class Endpoint:
     CREDENTIALS_FILE = 'credentials.json'
     USERNAME = 'sergey'
     url = 'http://167.172.172.115:52355/'
-    meme_id = []
+    max_time = 2
     response = None
     token = None
-    max_time = 2
+    meme_id = None
 
     @allure.step('Check 200 status code')
     def check_response_200(self):
@@ -30,8 +30,3 @@ class Endpoint:
     def check_response_time(self):
         assert self.response.elapsed.total_seconds() < self.max_time, \
             f"Response took too long: {self.response.elapsed.total_seconds()} seconds"
-
-    #  Беру последний добавленный айди мема. Два айди в списке появляются для кейса с проверкой дубликатов
-    @property
-    def get_meme_id(self):
-        return self.meme_id[-1]
