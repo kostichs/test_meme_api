@@ -26,18 +26,21 @@ def get_token_endpoint():
 @pytest.fixture()
 def get_memes_endpoint(authorize_endpoint):
     all_memes = GetAllMemes()
+    all_memes.token = authorize_endpoint.token
     return all_memes
 
 
 @pytest.fixture()
 def get_meme_by_id_endpoint(authorize_endpoint):
     meme = GetOneMeme()
+    meme.token = authorize_endpoint.token
     return meme
 
 
 @pytest.fixture()
 def create_meme_endpoint(authorize_endpoint):
     created_meme = CreateMeme()
+    created_meme.token = authorize_endpoint.token
     yield created_meme
     requests.delete(
         f"{created_meme.url}meme/{created_meme.meme_id}",
@@ -53,10 +56,12 @@ def create_meme_endpoint(authorize_endpoint):
 @pytest.fixture()
 def change_meme_endpoint(authorize_endpoint):
     changing_meme = FullChangeMeme()
+    changing_meme.token = authorize_endpoint.token
     return changing_meme
 
 
 @pytest.fixture()
 def delete_meme_endpoint(authorize_endpoint):
     deleting_meme = DeleteMeme()
+    deleting_meme.token = authorize_endpoint.token
     return deleting_meme

@@ -5,6 +5,7 @@ from root.endpoints.endpoint import Endpoint
 
 
 class GetAllMemes(Endpoint):
+
     @allure.step('Getting all memes using GET method')
     def get_all_memes(self):
         self.response = requests.get(
