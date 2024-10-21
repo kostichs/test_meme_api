@@ -46,6 +46,11 @@ def create_meme_endpoint(authorize_endpoint):
         f"{created_meme.url}meme/{created_meme.meme_id}",
         headers={"Authorization": created_meme.token}
     )
+    if created_meme.duplicate_id is not None:
+        requests.delete(
+            f"{created_meme.url}meme/{created_meme.duplicate_id}",
+            headers={"Authorization": created_meme.token}
+        )
 
 
 @pytest.fixture()

@@ -13,11 +13,8 @@ class FullChangeMeme(Endpoint):
             json=data,
             headers={"Authorization": self.token}
         )
-        try:
-            self.meme_id = self.response.json()['id']
-            self.check_response_200()
-        except requests.exceptions.JSONDecodeError:
-            print("JSONDecodeError")
+        self.meme_id = self.response.json()['id']
+        self.check_response_200()
 
     @allure.step('Check parameter values in the updated meme')
     def check_response_values(self, data):
@@ -47,4 +44,4 @@ class FullChangeMeme(Endpoint):
     @allure.step('Check the name of user who changed the meme')
     def check_changer_name(self):
         assert self.response.json()['updated_by'] == self.USERNAME, \
-            f"Name of user updated the meme is wrong: {self.response.json()['updated_by']}"
+            f"Name of user who updated meme is wrong: {self.response.json()['updated_by']}"

@@ -4,6 +4,7 @@ from root.endpoints.endpoint import Endpoint
 
 
 class CreateMeme(Endpoint):
+    duplicate_id = None
 
     @allure.step('Create a new meme with valid data')
     def create_a_meme(self, data):
@@ -43,9 +44,10 @@ class CreateMeme(Endpoint):
 
     @allure.step('Check for duplicate creation')
     def check_duplicate_creation(self, data):
-        self.create_a_meme(data)
         self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
         self.check_response_200()
+        # There is a duplicate meme I have to delete separately from original one
+        self.duplicate_id = self.response.json()['id']
 
     @allure.step('Create a meme by unauthorized user')
     def create_meme_unauthorized(self, data):

@@ -24,8 +24,7 @@ class GetAllMemes(Endpoint):
 
     @allure.step('Check if response is not empty')
     def check_response_not_empty(self):
-        response_json = self.response.json()
-        assert len(response_json['data']) > 0, "Response is empty"
+        assert len(self.response.json()['data']) > 0, "Response is empty"
 
     @allure.step('Check for unauthorized access')
     def check_unauthorized_access(self):
