@@ -71,7 +71,7 @@ def test_create_meme(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.check_response_values(meme)
     create_meme_endpoint.check_response_structure(MEME_KEYS)
     create_meme_endpoint.check_duplicate_creation(meme)
-    delete_meme_endpoint.delete_meme(create_meme_endpoint.meme_id)
+    delete_meme_endpoint.delete_meme(create_meme_endpoint.duplicate_id)
 
 
 @pytest.mark.parametrize("meme", MEME_DATA_NEGATIVE)
