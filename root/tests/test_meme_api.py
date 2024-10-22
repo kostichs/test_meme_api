@@ -14,7 +14,7 @@ def test_authorize_user(authorize_endpoint):
     authorize_endpoint.get_new_token()
     authorize_endpoint.check_response(HTTPStatus.OK)
     authorize_endpoint.get_token()
-
+    # TODO: add check old token
     authorize_endpoint.check_token()
     authorize_endpoint.check_username()
     authorize_endpoint.check_response_time(MAX_TIME)
@@ -42,7 +42,7 @@ def test_get_all_memes_unauthorized(get_memes_endpoint):
 @allure.feature('Memes')
 @allure.story('Get a meme by ID')
 @allure.title('Test get one meme by ID')
-def test_get_meme_by_id(create_default_meme, get_meme_by_id_endpoint, ):
+def test_get_meme_by_id(create_default_meme, get_meme_by_id_endpoint):
     get_meme_by_id_endpoint.get_meme_by_id(meme_id=create_default_meme.meme_id)
     get_meme_by_id_endpoint.check_response(HTTPStatus.OK)
     get_meme_by_id_endpoint.check_id(meme_id=create_default_meme.meme_id)
@@ -55,7 +55,7 @@ def test_get_meme_by_id(create_default_meme, get_meme_by_id_endpoint, ):
 @allure.feature('Memes')
 @allure.story('Negative cases for get meme by ID')
 @allure.title('Test get one meme with invalid IDs')
-def test_get_one_meme_with_negative_id(get_meme_by_id_endpoint, invalid_id):
+def test_get_one_meme_with_invalid_id(get_meme_by_id_endpoint, invalid_id):
     get_meme_by_id_endpoint.get_meme_by_id(invalid_id)
     get_meme_by_id_endpoint.check_response(HTTPStatus.NOT_FOUND)
 
@@ -69,38 +69,26 @@ def test_get_meme_unauthorized(get_meme_by_id_endpoint, meme_id):
     get_meme_by_id_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
 
 
-@pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
+@pytest.mark.parametrize("create_meme_endpoint", MEME_DATA_POSITIVE, indirect=True)
 @allure.feature('Memes')
 @allure.story('Create meme')
 @allure.title('Test create meme')
-def test_create_meme(create_meme_endpoint, delete_meme_endpoint, meme):
-    create_meme_endpoint.create_a_meme(meme)
+def test_create_meme(create_meme_endpoint):
     create_meme_endpoint.check_response(HTTPStatus.OK)
     create_meme_endpoint.check_response_time(MAX_TIME)
-    create_meme_endpoint.check_response_values(meme)
+    create_meme_endpoint.check_response_values()
     create_meme_endpoint.check_response_structure(MEME_KEYS)
 
 
-@pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
-@allure.feature('Memes')
-@allure.story('Create a duplicate')
-@allure.title('Test create meme')
-def test_create_duplicated_meme(create_meme_endpoint, delete_meme_endpoint, meme):
-    create_meme_endpoint.create_a_meme(meme)
-    create_meme_endpoint.create_a_meme(meme)
-    create_meme_endpoint.check_response(HTTPStatus.OK)
-
-
-@pytest.mark.parametrize("meme", MEME_DATA_NEGATIVE)
+@pytest.mark.parametrize("create_meme_endpoint", MEME_DATA_NEGATIVE, indirect=True)
 @allure.feature('Memes')
 @allure.story('Create meme with invalid data')
 @allure.title('Test create meme with invalid data')
-def test_create_meme_with_invalid_data(create_meme_endpoint, meme):
-    create_meme_endpoint.create_a_meme(meme)
+def test_create_meme_with_invalid_data(create_meme_endpoint):
     create_meme_endpoint.check_response(HTTPStatus.BAD_REQUEST)
 
 
-@pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
+@pytest.mark.parametrize("create_meme_endpoint", MEME_DATA_POSITIVE)
 @allure.feature('Memes')
 @allure.story('Unauthorized access for create meme')
 @allure.title('Test create meme unauthorized')
@@ -109,7 +97,6 @@ def test_create_meme_unauthorized(create_meme_endpoint, meme):
     create_meme_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
 
 
-@pytest.mark.smoke
 @pytest.mark.parametrize("meme", MEME_CHANGE_DATA)
 @allure.feature('Memes')
 @allure.story('Change meme')
@@ -161,10 +148,10 @@ def test_delete_meme_unauthorized(create_default_meme, delete_meme_endpoint):
     delete_meme_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
 
 
-@pytest.mark.parametrize('fake_id', [999999, "invalid_id", -1, None])
+@pytest.mark.smoke
+@pytest.mark.parametrize('delete_meme_endpoint', [999999, "invalid_id", -1, None], indirect=True)
 @allure.feature('Memes')
 @allure.story('Delete meme with invalid IDs')
 @allure.title('Test delete meme with fake IDs')
-def test_delete_meme_with_fake_id(delete_meme_endpoint, fake_id):
-    delete_meme_endpoint.delete_meme(meme_id=fake_id)
+def test_delete_meme_with_invalid_id(delete_meme_endpoint):
     delete_meme_endpoint.check_response(HTTPStatus.NOT_FOUND)

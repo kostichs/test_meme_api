@@ -40,8 +40,9 @@ def get_meme_by_id_endpoint(token):
 
 
 @pytest.fixture()
-def create_meme_endpoint(token, delete_meme_endpoint):
+def create_meme_endpoint(request, token, delete_meme_endpoint):
     created_meme = CreateMeme(token)
+    created_meme.create_a_meme(request.param)
     yield created_meme
     if created_meme.meme_id:
         delete_meme_endpoint.delete_meme(created_meme.meme_id)
@@ -53,8 +54,9 @@ def change_meme_endpoint(token):
 
 
 @pytest.fixture()
-def delete_meme_endpoint(token):
+def delete_meme_endpoint(request, token):
     deleting_meme = DeleteMeme(token)
+    deleting_meme.delete_meme(meme_id=request.param)
     return deleting_meme
 
 

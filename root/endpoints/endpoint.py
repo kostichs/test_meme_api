@@ -11,7 +11,6 @@ class Endpoint:
     def __init__(self, username=None, token=None):
         self.username = username
         self.token = token
-        self.max_time = 2
 
     def check_response(self, status: Enum):
         with allure.step(f"Check {status.name} status code"):
