@@ -116,7 +116,6 @@ def test_change_meme(change_meme_endpoint, create_default_meme, meme):
 def test_change_meme_unauthorized(change_meme_endpoint, create_default_meme, meme):
     change_meme_endpoint.change_meme(data=meme, meme_id=create_default_meme.meme_id, authorized=False)
     change_meme_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
-    # TODO: добавить изменение существующего мема, но не являющегося твоим
 
 
 @pytest.mark.parametrize("valid_meme, invalid_meme", zip(MEME_DATA_POSITIVE, MEME_DATA_NEGATIVE))
@@ -154,4 +153,3 @@ def test_delete_meme_unauthorized(create_default_meme, delete_meme_endpoint):
 def test_delete_meme_with_invalid_id(delete_meme_endpoint, fake_id):
     delete_meme_endpoint.delete_meme(meme_id=fake_id)
     delete_meme_endpoint.check_response(HTTPStatus.NOT_FOUND)
-    # TODO: Удалить существующий мем, но созданный не тобой
