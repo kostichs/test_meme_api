@@ -18,6 +18,6 @@ class Endpoint:
             assert self.response.status_code == status.value, f"Unexpected status code: {self.response.status_code}"
 
     @allure.step('Check response time')
-    def check_response_time(self):
-        assert self.response.elapsed.total_seconds() < self.max_time, \
+    def check_response_time(self, max_time):
+        assert self.response.elapsed.total_seconds() < max_time, \
             f"Response took too long: {self.response.elapsed.total_seconds()} seconds"

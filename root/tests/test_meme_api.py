@@ -2,7 +2,8 @@ import pytest
 import allure
 
 from root.data.htttp_enum import HTTPStatus
-from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, MEME_DATA_NEGATIVE, MEME_CHANGE_DATA
+from root.data.test_parameters import (MEME_DATA_POSITIVE, MEME_DATA_NEGATIVE, MEME_CHANGE_DATA,
+                                       MAX_TIME, MEME_KEYS, MEME_IDS)
 
 
 @pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
@@ -16,7 +17,7 @@ def test_authorize_user(authorize_endpoint):
 
     authorize_endpoint.check_token()
     authorize_endpoint.check_username()
-    authorize_endpoint.check_response_time()
+    authorize_endpoint.check_response_time(MAX_TIME)
 
 
 @allure.feature('Memes')
@@ -27,7 +28,7 @@ def test_get_all_memes(get_memes_endpoint):
     get_memes_endpoint.check_response(HTTPStatus.OK)
     get_memes_endpoint.check_response_not_empty()
     get_memes_endpoint.check_response_structure(MEME_KEYS)
-    get_memes_endpoint.check_response_time()
+    get_memes_endpoint.check_response_time(MAX_TIME)
 
 
 @allure.feature('Memes')
@@ -47,7 +48,7 @@ def test_get_meme_by_id(create_default_meme, get_meme_by_id_endpoint, ):
     get_meme_by_id_endpoint.check_id(meme_id=create_default_meme.meme_id)
     get_meme_by_id_endpoint.check_response_not_empty()
     get_meme_by_id_endpoint.check_response_structure(MEME_KEYS)
-    get_meme_by_id_endpoint.check_response_time()
+    get_meme_by_id_endpoint.check_response_time(MAX_TIME)
 
 
 @pytest.mark.parametrize('invalid_id', [999999, "invalid_id", -1, 0, None])
@@ -75,7 +76,7 @@ def test_get_meme_unauthorized(get_meme_by_id_endpoint, meme_id):
 def test_create_meme(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(meme)
     create_meme_endpoint.check_response(HTTPStatus.OK)
-    create_meme_endpoint.check_response_time()
+    create_meme_endpoint.check_response_time(MAX_TIME)
     create_meme_endpoint.check_response_values(meme)
     create_meme_endpoint.check_response_structure(MEME_KEYS)
 
@@ -119,7 +120,7 @@ def test_change_meme(change_meme_endpoint, create_default_meme, meme):
     change_meme_endpoint.check_changer_name()
     change_meme_endpoint.check_response_values(data=meme)
     change_meme_endpoint.check_response_structure(meme.keys())
-    change_meme_endpoint.check_response_time()
+    change_meme_endpoint.check_response_time(MAX_TIME)
 
 
 @pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
@@ -147,7 +148,7 @@ def test_change_meme_with_invalid_data(change_meme_endpoint, create_default_meme
 def test_delete_meme(create_default_meme, delete_meme_endpoint, get_meme_by_id_endpoint):
     delete_meme_endpoint.delete_meme(meme_id=create_default_meme.meme_id)
     delete_meme_endpoint.check_response(HTTPStatus.OK)
-    delete_meme_endpoint.check_response_time()
+    delete_meme_endpoint.check_response_time(MAX_TIME)
     get_meme_by_id_endpoint.get_meme_by_id(meme_id=create_default_meme.meme_id)
     get_meme_by_id_endpoint.check_response(HTTPStatus.NOT_FOUND)
 

@@ -16,3 +16,4 @@ MEME_KEYS = ['id', 'url', 'text', 'tags', 'info']
 MEME_IDS = [1, 2, 3, 4, 5]
 CREDENTIALS_FILE = 'credentials.json'
 USERNAME = 'sergey'
+MAX_TIME = 2
