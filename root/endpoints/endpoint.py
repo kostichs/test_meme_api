@@ -1,5 +1,8 @@
 import allure
 
+from root.data.htttp_enum import HTTPStatus
+from enum import Enum
+
 
 class Endpoint:
     CREDENTIALS_FILE = 'credentials.json'
@@ -16,21 +19,9 @@ class Endpoint:
     def token(self, value):
         Endpoint.token = value
 
-    @allure.step('Check 200 status code')
-    def check_response_200(self):
-        assert self.response.status_code == 200, f"Unexpected status code: {self.response.status_code}"
-
-    @allure.step('Check 400 status code')
-    def check_response_400(self):
-        assert self.response.status_code == 400, f"Unexpected status code: {self.response.status_code}"
-
-    @allure.step('Check 401 status code')
-    def check_response_401(self):
-        assert self.response.status_code == 401, f"Unexpected status code: {self.response.status_code}"
-
-    @allure.step('Check 404 status code')
-    def check_response_404(self):
-        assert self.response.status_code == 404, f"Unexpected status code: {self.response.status_code}"
+    def check_response(self, status: Enum):
+        with allure.step(f"Check {status.name} status code"):
+            assert self.response.status_code == status.value, f"Unexpected status code: {self.response.status_code}"
 
     @allure.step('Check response time')
     def check_response_time(self):

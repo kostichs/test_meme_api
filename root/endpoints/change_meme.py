@@ -1,5 +1,7 @@
 import allure
 import requests
+
+from root.data.htttp_enum import HTTPStatus
 from root.endpoints.endpoint import Endpoint
 
 
@@ -13,7 +15,7 @@ class FullChangeMeme(Endpoint):
             json=data,
             headers={"Authorization": self.token}
         )
-        self.check_response_200()
+        self.check_response(HTTPStatus.OK)
 
     @allure.step('Check parameter values in the updated meme')
     def check_response_values(self, data):
@@ -33,12 +35,12 @@ class FullChangeMeme(Endpoint):
             json=data,
             headers={"Authorization": self.token}
         )
-        self.check_response_400()
+        self.check_response(HTTPStatus.BAD_REQUEST)
 
     @allure.step('Change meme by unauthorized user')
     def change_meme_unauthorized(self, data, meme_id):
         self.response = requests.put(f"{self.url}/meme/{meme_id}", json=data)
-        self.check_response_401()
+        self.check_response(HTTPStatus.UNAUTHORIZED)
 
     @allure.step('Check the name of user who changed the meme')
     def check_changer_name(self):

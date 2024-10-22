@@ -1,6 +1,7 @@
 import requests
 import allure
 
+from root.data.htttp_enum import HTTPStatus
 from root.endpoints.endpoint import Endpoint
 
 
@@ -12,7 +13,7 @@ class GetAllMemes(Endpoint):
             f"{self.url}/meme",
             headers={"Authorization": self.token}
         )
-        self.check_response_200()
+        self.check_response(HTTPStatus.OK)
 
     @allure.step('Check response structure for all memes')
     def check_response_structure(self, expected_keys):
@@ -30,9 +31,9 @@ class GetAllMemes(Endpoint):
     @allure.step('Check for unauthorized access')
     def check_unauthorized_access(self):
         self.response = requests.get(f"{self.url}/meme")
-        self.check_response_401()
+        self.check_response(HTTPStatus.UNAUTHORIZED)
 
     @allure.step('Check for invalid URL')
     def check_invalid_url(self, data):
         self.response = requests.get(f"{self.url}{data}", headers={"Authorization": self.token})
-        self.check_response_404()
+        self.check_response(HTTPStatus.NOT_FOUND)
