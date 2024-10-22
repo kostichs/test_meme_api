@@ -24,6 +24,7 @@ def test_authorize_user(authorize_endpoint):
 @allure.title('Test get all memes')
 def test_get_all_memes(get_memes_endpoint):
     get_memes_endpoint.get_all_memes()
+    get_memes_endpoint.check_response(HTTPStatus.OK)
     get_memes_endpoint.check_response_not_empty()
     get_memes_endpoint.check_response_structure(MEME_KEYS)
     get_memes_endpoint.check_response_time()
@@ -33,7 +34,8 @@ def test_get_all_memes(get_memes_endpoint):
 @allure.story('Negative cases for get memes')
 @allure.title('Test get all memes with negative cases')
 def test_get_all_memes_unauthorized(get_memes_endpoint):
-    get_memes_endpoint.check_unauthorized_access()
+    get_memes_endpoint.get_all_memes(authorized=False)
+    get_memes_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
 
 
 @allure.feature('Memes')
@@ -66,7 +68,6 @@ def test_get_meme_unauthorized(get_meme_by_id_endpoint, meme_id):
     get_meme_by_id_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
 
 
-@pytest.mark.smoke
 @pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
 @allure.feature('Memes')
 @allure.story('Create meme')
@@ -77,7 +78,16 @@ def test_create_meme(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.check_response_time()
     create_meme_endpoint.check_response_values(meme)
     create_meme_endpoint.check_response_structure(MEME_KEYS)
+
+
+@pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
+@allure.feature('Memes')
+@allure.story('Create a duplicate')
+@allure.title('Test create meme')
+def test_create_duplicated_meme(create_meme_endpoint, delete_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(meme)
+    create_meme_endpoint.create_a_meme(meme)
+    create_meme_endpoint.check_response(HTTPStatus.OK)
 
 
 @pytest.mark.parametrize("meme", MEME_DATA_NEGATIVE)
@@ -95,6 +105,7 @@ def test_create_meme_with_invalid_data(create_meme_endpoint, meme):
 @allure.title('Test create meme unauthorized')
 def test_create_meme_unauthorized(create_meme_endpoint, meme):
     create_meme_endpoint.create_a_meme(data=meme, authorized=False)
+    create_meme_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
 
 
 @pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
@@ -103,6 +114,7 @@ def test_create_meme_unauthorized(create_meme_endpoint, meme):
 @allure.title('Test change meme')
 def test_change_meme(change_meme_endpoint, create_default_meme, meme):
     change_meme_endpoint.change_meme(data=meme, meme_id=create_default_meme.meme_id)
+    change_meme_endpoint.check_response(HTTPStatus.OK)
     change_meme_endpoint.check_changer_name()
     change_meme_endpoint.check_response_values(data=meme)
     change_meme_endpoint.check_response_structure(meme.keys())
@@ -114,7 +126,8 @@ def test_change_meme(change_meme_endpoint, create_default_meme, meme):
 @allure.story('Unauthorized access for change meme')
 @allure.title('Test change meme unauthorized')
 def test_change_meme_unauthorized(change_meme_endpoint, create_default_meme, meme):
-    change_meme_endpoint.change_meme_unauthorized(data=meme, meme_id=create_default_meme.meme_id)
+    change_meme_endpoint.change_meme(data=meme, meme_id=create_default_meme.meme_id, authorized=False)
+    change_meme_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
     # TODO: добавить изменение существующего мема, но не являющегося твоим
 
 
@@ -123,7 +136,8 @@ def test_change_meme_unauthorized(change_meme_endpoint, create_default_meme, mem
 @allure.story('Change meme with invalid data')
 @allure.title('Test change meme with invalid data')
 def test_change_meme_with_invalid_data(change_meme_endpoint, create_default_meme, valid_meme, invalid_meme):
-    change_meme_endpoint.check_invalid_data(data=invalid_meme, meme_id=create_default_meme.meme_id)
+    change_meme_endpoint.change_meme(data=invalid_meme, meme_id=create_default_meme.meme_id)
+    change_meme_endpoint.check_response(HTTPStatus.BAD_REQUEST)
 
 
 @allure.feature('Memes')

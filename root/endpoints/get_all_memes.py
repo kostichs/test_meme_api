@@ -12,12 +12,16 @@ class GetAllMemes(Endpoint):
         self.token = token
 
     @allure.step('Getting all memes using GET method')
-    def get_all_memes(self):
+    def get_all_memes(self, authorized=True):
+        if authorized:
+            headers = {"Authorization": self.token}
+        else:
+            headers = None
+
         self.response = requests.get(
             f"{self.url}/meme",
-            headers={"Authorization": self.token}
+            headers=headers
         )
-        self.check_response(HTTPStatus.OK)
 
     @allure.step('Check response structure for all memes')
     def check_response_structure(self, expected_keys):
@@ -35,7 +39,7 @@ class GetAllMemes(Endpoint):
     @allure.step('Check for unauthorized access')
     def check_unauthorized_access(self):
         self.response = requests.get(f"{self.url}/meme")
-        self.check_response(HTTPStatus.UNAUTHORIZED)
+
 
     @allure.step('Check for invalid URL')
     def check_invalid_url(self, data):
