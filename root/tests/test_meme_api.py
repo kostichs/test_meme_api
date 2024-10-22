@@ -2,7 +2,7 @@ import pytest
 import allure
 
 from root.data.htttp_enum import HTTPStatus
-from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, MEME_DATA_NEGATIVE
+from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, MEME_DATA_NEGATIVE, MEME_CHANGE_DATA
 
 
 @pytest.mark.skip('Reason: to avoid overloading of new tokens on server. Use only if necessary')
@@ -108,7 +108,8 @@ def test_create_meme_unauthorized(create_meme_endpoint, meme):
     create_meme_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
 
 
-@pytest.mark.parametrize("meme", MEME_DATA_POSITIVE)
+@pytest.mark.smoke
+@pytest.mark.parametrize("meme", MEME_CHANGE_DATA)
 @allure.feature('Memes')
 @allure.story('Change meme')
 @allure.title('Test change meme')

@@ -1,0 +1,38 @@
+[
+    {
+        "info": {
+            "colors": ["green", "black", "purple"],
+            "objects": ["animation", "quote"]
+        },
+        "tags": ["joy", "cartoon"],
+        "url": "https://avatars.mds.yandex.net/i?id=39f21548339f2eb17e04d6ddf6d693bd_l-9226126-images-thumbs&n=13",
+        "text": "You are amazing!"
+    },
+    {
+        "info": {
+            "colors": ["blue", "yellow", "pink"],
+            "objects": ["graphic", "subtitle"]
+        },
+        "tags": ["bender", "robot"],
+        "url": "https://avatars.mds.yandex.net/i?id=14b5e8f58cd95db2db0fd652df022cbe_l-7752980-images-thumbs&n=13",
+        "text": "Bender's revolution!"
+    },
+    {
+        "info": {
+            "colors": ["gray", "white"],
+            "objects": ["graphic", "phrase"]
+        },
+        "tags": ["doodle", "confused"],
+        "url": "https://www.meme-arsenal.com/memes/aa8ee8c2fa3b65fbbec1bfe8d60f7f12.jpg",
+        "text": "What’s happening?"
+    },
+    {
+        "info": {
+            "colors": ["blue", "white", "green"],
+            "objects": ["artwork", "statement"]
+        },
+        "tags": ["fox", "drawing"],
+        "url": "https://avatars.mds.yandex.net/i?id=8253f79539b7ccb63340ba2595195f72_sr-8244444-images-thumbs&n=13",
+        "text": "Absolutely fantastic!"
+    }
+]
