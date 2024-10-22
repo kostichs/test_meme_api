@@ -7,8 +7,9 @@ from root.endpoints.endpoint import Endpoint
 
 class FullChangeMeme(Endpoint):
 
-    def __init__(self, username):
+    def __init__(self, username, token):
         super().__init__(username=username)
+        self.token = token
 
     @allure.step('Change meme with PUT method')
     def change_meme(self, data, meme_id):

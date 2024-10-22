@@ -7,28 +7,29 @@ from root.endpoints.endpoint import Endpoint
 
 class GetOneMeme(Endpoint):
 
+    def __init__(self, token):
+        super().__init__()
+        self.token = token
+
     @allure.step('Get a meme using GET method')
-    def get_one_meme(self, meme_id):
+    def get_meme_by_id(self, meme_id, headers=None):
+        if not headers:
+            headers = {"Authorization": self.token}
+        else:
+            headers = None
         self.response = requests.get(
             f"{self.url}meme/{meme_id}",
-            headers={"Authorization": self.token}
+            headers=headers
         )
-        self.check_response(HTTPStatus.OK)
 
-    @allure.step('Check for 404 status code when meme does not exist')
-    def check_meme_not_found(self, meme_id):
-        self.response = requests.get(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
-        self.check_response(HTTPStatus.NOT_FOUND)
+    @allure.step('Check if id of received meme is equal the given id')
+    def check_id(self, meme_id):
+        assert self.response.json()['id'] == meme_id, f"Receive ID is wrong: {self.response.json()['id']}"
 
     @allure.step('Check response structure')
     def check_response_structure(self, expected_keys):
         for key in expected_keys:
             assert key in self.response.json(), f"Key '{key}' not found in response"
-
-    @allure.step('Check unauthorized access')
-    def check_unauthorized_access(self, meme_id):
-        self.response = requests.get(f"{self.url}meme/{meme_id}")
-        self.check_response(HTTPStatus.UNAUTHORIZED)
 
     @allure.step('Check that response is not empty')
     def check_response_not_empty(self):

@@ -16,6 +16,6 @@ def test_end_to_end(authorize_endpoint, create_meme_endpoint, get_memes_endpoint
     get_memes_endpoint.get_all_memes()
     create_meme_endpoint.create_a_meme(data=meme)
     meme_id = create_meme_endpoint.meme_id
-    get_meme_by_id_endpoint.get_one_meme(meme_id)
+    get_meme_by_id_endpoint.get_meme_by_id(meme_id)
     change_meme_endpoint.change_meme(data=meme, meme_id=meme_id)
     delete_meme_endpoint.delete_meme(meme_id=meme_id)

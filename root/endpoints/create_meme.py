@@ -7,7 +7,9 @@ from root.endpoints.endpoint import Endpoint
 
 class CreateMeme(Endpoint):
 
-    def __init__(self):
+    def __init__(self, token):
+        super().__init__()
+        self.token = token
         self.meme_id = None
         self.duplicate_id = None
 

@@ -7,7 +7,11 @@ from root.endpoints.endpoint import Endpoint
 
 class DeleteMeme(Endpoint):
 
-    @allure.step('Delete an object using DELETE method')
+    def __init__(self, token):
+        super().__init__()
+        self.token = token
+
+    @allure.step('Delete an object by id using DELETE method')
     def delete_meme(self, meme_id):
         self.response = requests.delete(f"{self.url}meme/{meme_id}", headers={"Authorization": self.token})
         self.check_response(HTTPStatus.OK)

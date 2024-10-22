@@ -6,19 +6,12 @@ from enum import Enum
 
 class Endpoint:
     url = 'http://167.172.172.115:52355/'
-    max_time = 2
     response = None
 
-    def __init__(self, username=None):
+    def __init__(self, username=None, token=None):
         self.username = username
-
-    @property
-    def token(self):
-        return Endpoint.token
-
-    @token.setter
-    def token(self, value):
-        Endpoint.token = value
+        self.token = token
+        self.max_time = 2
 
     def check_response(self, status: Enum):
         with allure.step(f"Check {status.name} status code"):
