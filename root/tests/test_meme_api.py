@@ -150,4 +150,5 @@ def test_delete_meme_unauthorized(create_default_meme, delete_meme_endpoint):
 @allure.story('Delete meme with invalid IDs')
 @allure.title('Test delete meme with fake IDs')
 def test_delete_meme_with_fake_id(delete_meme_endpoint, fake_id):
-    delete_meme_endpoint.check_negative_deletion(fake_id)
+    delete_meme_endpoint.delete_meme(meme_id=fake_id)
+    delete_meme_endpoint.check_response(HTTPStatus.NOT_FOUND)
