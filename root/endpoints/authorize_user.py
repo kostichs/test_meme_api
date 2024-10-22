@@ -20,7 +20,6 @@ class AuthorizeUser(Endpoint):
     def get_new_token(self):
         self.token = self.__load_token_from_page()
         self.__save_token_to_file(self.token)
-        self.check_response(HTTPStatus.OK)
 
     @allure.step('Check if there is a saved valid token in a file')
     def __get_token_from_file(self):

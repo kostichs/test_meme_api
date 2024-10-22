@@ -39,11 +39,6 @@ class CreateMeme(Endpoint):
         for key in expected_keys:
             assert key in response_json, f"{key} not found in response"
 
-    @allure.step('Check specific parameter value')
-    def check_specific_parameter(self, key, expected_value):
-        assert self.response.json()[key] == expected_value, \
-            f"{key} is wrong: '{self.response.json()[key]}'"
-
     @allure.step('Check for duplicate creation')
     def check_duplicate_creation(self, data):
         self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})

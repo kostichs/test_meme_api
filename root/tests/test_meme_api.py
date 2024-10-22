@@ -1,6 +1,5 @@
 import pytest
 import allure
-from Tools.scripts.generate_opcode_h import header
 
 from root.data.htttp_enum import HTTPStatus
 from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, MEME_DATA_NEGATIVE
@@ -12,7 +11,9 @@ from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, M
 @allure.title('Test user authorization flow')
 def test_authorize_user(authorize_endpoint):
     authorize_endpoint.get_new_token()
+    authorize_endpoint.check_response(HTTPStatus.OK)
     authorize_endpoint.get_token()
+
     authorize_endpoint.check_token()
     authorize_endpoint.check_username()
     authorize_endpoint.check_response_time()
@@ -128,25 +129,20 @@ def test_change_meme_with_invalid_data(change_meme_endpoint, create_default_meme
 @allure.feature('Memes')
 @allure.story('Delete meme')
 @allure.title('Test delete meme')
-def test_delete_meme(create_default_meme, delete_meme_endpoint):
+def test_delete_meme(create_default_meme, delete_meme_endpoint, get_meme_by_id_endpoint):
     delete_meme_endpoint.delete_meme(meme_id=create_default_meme.meme_id)
+    delete_meme_endpoint.check_response(HTTPStatus.OK)
     delete_meme_endpoint.check_response_time()
+    get_meme_by_id_endpoint.get_meme_by_id(meme_id=create_default_meme.meme_id)
+    get_meme_by_id_endpoint.check_response(HTTPStatus.NOT_FOUND)
 
 
 @allure.feature('Memes')
 @allure.story('Negative cases for delete meme unauthorized and with re-deletion')
 @allure.title('Test delete meme with negative case')
-def test_delete_meme_with_negative_case(create_default_meme, delete_meme_endpoint):
-    meme_id = create_default_meme.meme_id
-    delete_meme_endpoint.delete_meme_unauthorized(meme_id)
-
-
-
-
-
-    delete_meme_endpoint.delete_meme(meme_id)
-    delete_meme_endpoint.check_negative_deletion(meme_id)
-    # TODO: добавить удаление существующего мема, но не являющегося твоим
+def test_delete_meme_unauthorized(create_default_meme, delete_meme_endpoint):
+    delete_meme_endpoint.delete_meme(meme_id=create_default_meme.meme_id, authorized=False)
+    delete_meme_endpoint.check_response(HTTPStatus.UNAUTHORIZED)
 
 
 @pytest.mark.parametrize('fake_id', [999999, "invalid_id", -1, None])
