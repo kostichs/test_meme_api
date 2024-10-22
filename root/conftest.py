@@ -9,6 +9,14 @@ from root.endpoints.get_all_memes import GetAllMemes
 from root.endpoints.get_one_meme import GetOneMeme
 
 
+@pytest.fixture()
+def set_token(authorize_endpoint):
+    def _set_token(endpoint):
+        endpoint.token = authorize_endpoint.token
+        return endpoint
+    return _set_token
+
+
 @pytest.fixture(scope="session")
 def authorize_endpoint(get_token_endpoint):
     authorized_user = AuthorizeUser()
@@ -24,23 +32,18 @@ def get_token_endpoint():
 
 
 @pytest.fixture()
-def get_memes_endpoint(authorize_endpoint):
-    all_memes = GetAllMemes()
-    all_memes.token = authorize_endpoint.token
-    return all_memes
+def get_memes_endpoint(set_token):
+    return set_token(GetAllMemes())
 
 
 @pytest.fixture()
-def get_meme_by_id_endpoint(authorize_endpoint):
-    meme = GetOneMeme()
-    meme.token = authorize_endpoint.token
-    return meme
+def get_meme_by_id_endpoint(set_token):
+    return set_token(GetOneMeme())
 
 
 @pytest.fixture()
-def create_meme_endpoint(authorize_endpoint):
-    created_meme = CreateMeme()
-    created_meme.token = authorize_endpoint.token
+def create_meme_endpoint(set_token):
+    created_meme = set_token(CreateMeme())
     yield created_meme
     requests.delete(
         f"{created_meme.url}meme/{created_meme.meme_id}",
@@ -54,14 +57,12 @@ def create_meme_endpoint(authorize_endpoint):
 
 
 @pytest.fixture()
-def change_meme_endpoint(authorize_endpoint):
-    changing_meme = FullChangeMeme()
-    changing_meme.token = authorize_endpoint.token
+def change_meme_endpoint(set_token):
+    changing_meme = set_token(FullChangeMeme())
     return changing_meme
 
 
 @pytest.fixture()
-def delete_meme_endpoint(authorize_endpoint):
-    deleting_meme = DeleteMeme()
-    deleting_meme.token = authorize_endpoint.token
+def delete_meme_endpoint(set_token):
+    deleting_meme = set_token(DeleteMeme())
     return deleting_meme
