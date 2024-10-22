@@ -5,11 +5,12 @@ from enum import Enum
 
 
 class Endpoint:
-    CREDENTIALS_FILE = 'credentials.json'
-    USERNAME = 'sergey'
     url = 'http://167.172.172.115:52355/'
     max_time = 2
     response = None
+
+    def __init__(self, username=None):
+        self.username = username
 
     @property
     def token(self):

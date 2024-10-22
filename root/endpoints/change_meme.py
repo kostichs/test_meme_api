@@ -7,6 +7,9 @@ from root.endpoints.endpoint import Endpoint
 
 class FullChangeMeme(Endpoint):
 
+    def __init__(self, username):
+        super().__init__(username=username)
+
     @allure.step('Change meme with PUT method')
     def change_meme(self, data, meme_id):
         data['id'] = meme_id
@@ -44,5 +47,5 @@ class FullChangeMeme(Endpoint):
 
     @allure.step('Check the name of user who changed the meme')
     def check_changer_name(self):
-        assert self.response.json()['updated_by'] == self.USERNAME, \
+        assert self.response.json()['updated_by'] == self.username, \
             f"Name of user who updated meme is wrong: {self.response.json()['updated_by']}"
