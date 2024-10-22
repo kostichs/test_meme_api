@@ -1,7 +1,5 @@
 import requests
 import allure
-
-from root.data.htttp_enum import HTTPStatus
 from root.endpoints.endpoint import Endpoint
 
 
@@ -12,8 +10,8 @@ class GetOneMeme(Endpoint):
         self.token = token
 
     @allure.step('Get a meme using GET method')
-    def get_meme_by_id(self, meme_id, headers=None):
-        if not headers:
+    def get_meme_by_id(self, meme_id, authorized=True):
+        if authorized:
             headers = {"Authorization": self.token}
         else:
             headers = None

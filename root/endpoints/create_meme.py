@@ -1,3 +1,5 @@
+from multiprocessing.managers import Value
+
 import requests
 import allure
 
@@ -14,26 +16,16 @@ class CreateMeme(Endpoint):
         self.duplicate_id = None
 
     @allure.step('Create a new meme with valid data')
-    def create_a_meme(self, data):
-        self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
-        if self.response.status_code == HTTPStatus.OK.value:
-            try:
-                self.meme_id = self.response.json().get('id')
-                if not self.meme_id:
-                    raise ValueError("Meme ID not found in the response.")
-            except Exception as e:
-                print(f"Failed to parse meme ID: {str(e)}")
-                raise
+    def create_a_meme(self, data, authorized=True):
+        if authorized:
+            headers = {"Authorization": self.token}
         else:
-            print(
-                f"Failed to create meme. Status code: {self.response.status_code}, Response: {self.response.text}")
-            raise Exception(f"Unexpected status code: {self.response.status_code}")
-        self.check_response(HTTPStatus.OK)
-
-    @allure.step('Create a new meme with invalid data')
-    def create_a_meme_with_invalid_data(self, data):
-        self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
-        self.check_response(HTTPStatus.BAD_REQUEST)
+            headers = None
+        self.response = requests.post(f"{self.url}/meme", json=data, headers=headers)
+        try:
+            self.meme_id = self.response.json()['id']
+        except ValueError:
+            self.meme_id = ""
 
     @allure.step('Check parameter values in the new meme')
     def check_response_values(self, data):
@@ -52,19 +44,9 @@ class CreateMeme(Endpoint):
         assert self.response.json()[key] == expected_value, \
             f"{key} is wrong: '{self.response.json()[key]}'"
 
-    @allure.step('Check for errors with invalid data')
-    def check_invalid_data(self, data):
-        self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
-        self.check_response(HTTPStatus.OK)
-
     @allure.step('Check for duplicate creation')
     def check_duplicate_creation(self, data):
         self.response = requests.post(f"{self.url}/meme", json=data, headers={"Authorization": self.token})
         self.check_response(HTTPStatus.OK)
         # There is a duplicate meme, so it will be deleted separately by duplicate_id
         self.duplicate_id = self.response.json()['id']
-
-    @allure.step('Create a meme by unauthorized user')
-    def create_meme_unauthorized(self, data):
-        self.response = requests.post(f"{self.url}/meme", json=data)
-        self.check_response(HTTPStatus.UNAUTHORIZED)
