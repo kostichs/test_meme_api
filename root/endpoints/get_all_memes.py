@@ -35,13 +35,3 @@ class GetAllMemes(Endpoint):
     @allure.step('Check if response is not empty')
     def check_response_not_empty(self):
         assert len(self.response.json()['data']) > 0, "Response is empty"
-
-    @allure.step('Check for unauthorized access')
-    def check_unauthorized_access(self):
-        self.response = requests.get(f"{self.url}/meme")
-
-
-    @allure.step('Check for invalid URL')
-    def check_invalid_url(self, data):
-        self.response = requests.get(f"{self.url}{data}", headers={"Authorization": self.token})
-        self.check_response(HTTPStatus.NOT_FOUND)

@@ -1,6 +1,4 @@
 import allure
-
-from root.data.htttp_enum import HTTPStatus
 from enum import Enum
 
 

@@ -1,7 +1,7 @@
 import pytest
 import allure
 import random
-from root.data.test_parameters import MEME_DATA_POSITIVE, MEME_KEYS, MEME_IDS, MEME_DATA_NEGATIVE
+from root.data.test_parameters import MEME_DATA_POSITIVE
 
 
 @pytest.mark.smoke

@@ -2,7 +2,6 @@ import os
 import json
 import requests
 import allure
-from root.data.htttp_enum import HTTPStatus
 from root.endpoints.endpoint import Endpoint
 
 
